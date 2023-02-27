@@ -5,12 +5,11 @@ import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 import { addContact, delContact } from 'redux/contacts-slice';
-import { setFilter } from 'redux/filter-slice';
-import { getContacts, getfilter } from 'redux/selectors';
+import { getContacts, getFilter } from 'redux/selectors';
 
 export function App() {
   const contacts = useSelector(getContacts);
-  const filter = useSelector(getfilter);
+  const filter = useSelector(getFilter);
   const dispatch = useDispatch();
   let initContacts = contacts ? contacts : [];
 
@@ -56,10 +55,7 @@ export function App() {
       <ContactForm onSubmit={formSubmit} />
       <div>
         <h2>Contacts</h2>
-        <Filter
-          value={filter}
-          onChange={({ target }) => dispatch(setFilter(target.value))}
-        />
+        <Filter />
         <ContactList
           findContactsArray={findContacts()}
           onClick={onClickDelete}
