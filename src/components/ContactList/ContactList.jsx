@@ -1,18 +1,41 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { delContact } from 'redux/contacts-slice';
+import { getContacts, getFilter } from '../../redux/selectors';
 import { List, Delete, ListItem } from './contact-list.styled';
 
-function ContactList({ findContactsArray, onClick }) {
+function ContactList() {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+  let initContacts = contacts ? contacts : [];
+
+  const onClickDelete = id => {
+    dispatch(delContact(id));
+  };
+
+  const findContacts = () => {
+    let filtered;
+    if (filter === '') {
+      return initContacts;
+    } else {
+      filtered = initContacts.filter(item =>
+        item.name.toLowerCase().includes(filter.toLowerCase())
+      );
+    }
+    return filtered;
+  };
+
   return (
     <List>
-      {findContactsArray.map(item => {
+      {findContacts().map(item => {
         return (
           <ListItem key={item.id}>
             <span>
               {item.name}:{item.number}
             </span>
 
-            <Delete onClick={() => onClick(item.id)} type="button">
+            <Delete onClick={() => onClickDelete(item.id)} type="button">
               Delete
             </Delete>
           </ListItem>
@@ -23,14 +46,3 @@ function ContactList({ findContactsArray, onClick }) {
 }
 
 export default ContactList;
-
-ContactList.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  findContactsArray: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-    })
-  ),
-};

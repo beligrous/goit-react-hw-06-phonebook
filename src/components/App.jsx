@@ -4,12 +4,12 @@ import { Container } from './App.styled';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
-import { addContact, delContact } from 'redux/contacts-slice';
-import { getContacts, getFilter } from 'redux/selectors';
+import { addContact } from 'redux/contacts-slice';
+import { getContacts } from 'redux/selectors';
 
 export function App() {
   const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  // const filter = useSelector(getFilter);
   const dispatch = useDispatch();
   let initContacts = contacts ? contacts : [];
 
@@ -33,22 +33,6 @@ export function App() {
     }
   };
 
-  const findContacts = () => {
-    let filtered;
-    if (filter === '') {
-      return initContacts;
-    } else {
-      filtered = initContacts.filter(item =>
-        item.name.toLowerCase().includes(filter.toLowerCase())
-      );
-    }
-    return filtered;
-  };
-
-  const onClickDelete = id => {
-    dispatch(delContact(id));
-  };
-
   return (
     <Container>
       <h1>Phonebook</h1>
@@ -56,10 +40,7 @@ export function App() {
       <div>
         <h2>Contacts</h2>
         <Filter />
-        <ContactList
-          findContactsArray={findContacts()}
-          onClick={onClickDelete}
-        />
+        <ContactList />
       </div>
     </Container>
   );
