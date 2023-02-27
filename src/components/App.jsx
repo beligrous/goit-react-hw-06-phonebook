@@ -6,10 +6,11 @@ import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 import { addContact, delContact } from 'redux/contacts-slice';
 import { setFilter } from 'redux/filter-slice';
+import { getContacts, getfilter } from 'redux/selectors';
 
 export function App() {
-  const contacts = useSelector(store => store.persistedReducer.contacts);
-  const filter = useSelector(store => store.persistedReducer.filter);
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getfilter);
   const dispatch = useDispatch();
   let initContacts = contacts ? contacts : [];
 
@@ -36,9 +37,9 @@ export function App() {
   const findContacts = () => {
     let filtered;
     if (filter === '') {
-      return contacts;
+      return initContacts;
     } else {
-      filtered = contacts.filter(item =>
+      filtered = initContacts.filter(item =>
         item.name.toLowerCase().includes(filter.toLowerCase())
       );
     }
